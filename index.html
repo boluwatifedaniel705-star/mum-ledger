@@ -515,7 +515,7 @@
               <p class="section-label">Add Item to this Record</p>
               <div class="add-item-form">
                 <input type="text" id="item-name-${credit.id}" placeholder="Item name (e.g. Rice)" />
-                <input type="number" id="item-qty-${credit.id}" placeholder="Quantity" />
+                <input type="text" id="item-qty-${credit.id}" placeholder="Quantity (e.g. 2 bags, 1 cup)" />
                 <input type="number" id="item-price-${credit.id}" placeholder="Unit price (₦)" />
                 <button class="btn small secondary" onclick="addItem(${credit.id}, ${customer.id})">+ Add Item</button>
               </div>
