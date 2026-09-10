@@ -54,12 +54,7 @@ def create_credit(credit: CreditCreate, db: Session = Depends(get_db)):
 def get_outstanding_credits(db: Session = Depends(get_db)):
     return db.query(models.CreditRecord).filter(models.CreditRecord.status == models.CreditStatus.pending).all()
 
-@router.get("/customers/{customer_id}")
-def get_customer_credits(customer_id: int, db: Session = Depends(get_db)):
-    customer = db.query(models.Customer).filter(models.Customer.id == customer_id).first()
-    if not customer:
-        raise HTTPException(status_code=404, detail="Customer not found")
-    return {"customer": customer, "credits": customer.credits}
+
 
 @router.get("/customers/search")
 def search_customer_by_name(name: str, db: Session = Depends(get_db)):
@@ -67,3 +62,11 @@ def search_customer_by_name(name: str, db: Session = Depends(get_db)):
     if not customers:
         raise HTTPException(status_code=404, detail="No customer found with that name")
     return customers
+
+@router.get("/customers/{customer_id}")
+def get_customer_credits(customer_id: int, db: Session = Depends(get_db)):
+    customer = db.query(models.Customer).filter(models.Customer.id == customer_id).first()
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return {"customer": customer, "credits": customer.credits}
+
