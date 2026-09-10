@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mum's Ledger</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a6fdb;
+      --blue-dark: #1458b0;
+      --blue-light: #eaf2ff;
+      --blue-glow: rgba(26,111,219,0.15);
+      --white: #ffffff;
+      --text: #1a1a1a;
+      --muted: #888;
+      --border: #d0e0f5;
+      --success-bg: #eaf2ff;
+      --error-bg: #fff0f0;
+      --error: #c0392b;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f0f5ff;
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    header {
+      background: var(--blue);
+      color: white;
+      padding: 20px 16px 14px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: 50%;
+      transform: translateX(-50%);
+      width: 120%;
+      height: 40px;
+      background: #f0f5ff;
+      border-radius: 50%;
+    }
+
+    header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      letter-spacing: 0.3px;
+    }
+
+    header p {
+      font-size: 13px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background: var(--white);
+      padding: 10px 0 6px;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+      z-index: 100;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    nav button .icon { font-size: 20px; }
+
+    nav button.active {
+      color: var(--blue);
+      background: var(--blue-light);
+      font-weight: 700;
+    }
+
+    .page {
+      display: none;
+      padding: 32px 16px 16px;
+      animation: fadeSlideUp 0.3s ease;
+    }
+
+    .page.active { display: block; }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 16px 14px;
+      box-shadow: 0 2px 8px rgba(26,111,219,0.08);
+      animation: popIn 0.4s ease both;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.05s; }
+    .stat-card:nth-child(2) { animation-delay: 0.1s; }
+    .stat-card:nth-child(3) { animation-delay: 0.15s; }
+    .stat-card:nth-child(4) { animation-delay: 0.2s; }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.93); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .stat-card.wide {
+      grid-column: span 2;
+      background: var(--blue);
+      color: white;
+    }
+
+    .stat-card h3 {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-card.wide h3 { color: rgba(255,255,255,0.75); }
+
+    .stat-card p {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .stat-card.wide p { color: white; font-size: 28px; }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(26,111,219,0.07);
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      display: block;
+      margin: 12px 0 4px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      background: #f5f8ff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-glow);
+    }
+
+    button.btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(26,111,219,0.3);
+    }
+
+    button.btn:hover { background: var(--blue-dark); }
+    button.btn:active { transform: scale(0.97); box-shadow: none; }
+
+    button.btn.secondary {
+      background: var(--blue-light);
+      color: var(--blue);
+      box-shadow: none;
+    }
+
+    .message {
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      animation: fadeSlideUp 0.25s ease;
+    }
+
+    .success { background: var(--success-bg); color: var(--blue-dark); }
+    .error { background: var(--error-bg); color: var(--error); }
+
+    .debt-item {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(26,111,219,0.07);
+      animation: fadeSlideUp 0.3s ease both;
+    }
+
+    .debt-item h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .debt-item .amount {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+
+    .search-result {
+      margin-top: 10px;
+      padding: 14px;
+      background: var(--blue-light);
+      border-radius: 12px;
+      animation: fadeSlideUp 0.25s ease;
+    }
+
+    .search-result strong { font-size: 16px; }
+    .search-result span { font-size: 13px; color: var(--muted); display: block; margin-top: 2px; }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state .emoji { font-size: 40px; margin-bottom: 10px; }
+    .empty-state p { font-size: 15px; }
+
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(26,111,219,0.2);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-text { color: var(--muted); font-size: 14px; display: flex; align-items: center; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Mum's Ledger</h1>
+  <p>Provisions & Wholesale</p>
+</header>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="page active">
+  <div class="summary-grid">
+    <div class="stat-card wide">
+      <h3>Net Balance</h3>
+      <p id="net-balance"><span class="spinner"></span></p>
+    </div>
+    <div class="stat-card">
+      <h3>Sales</h3>
+      <p id="total-sales">—</p>
+    </div>
+    <div class="stat-card">
+      <h3>Expenses</h3>
+      <p id="total-expenses">—</p>
+    </div>
+    <div class="stat-card wide">
+      <h3>Outstanding Debt</h3>
+      <p id="outstanding-debt">—</p>
+    </div>
+  </div>
+</div>
+
+<!-- RECORD TRANSACTION -->
+<div id="transaction" class="page">
+  <p class="section-title">Record</p>
+  <div class="card">
+    <label>Type</label>
+    <select id="type">
+      <option value="sale">💰 Sale</option>
+      <option value="expense">🧾 Expense</option>
+    </select>
+    <label>Amount (₦)</label>
+    <input type="number" id="amount" placeholder="e.g. 5000" />
+    <label>Description (optional)</label>
+    <input type="text" id="description" placeholder="e.g. sold rice and beans" />
+    <button class="btn" onclick="recordTransaction()">Save Record</button>
+    <div id="transaction-msg"></div>
+  </div>
+</div>
+
+<!-- CUSTOMER -->
+<div id="customer" class="page">
+  <p class="section-title">Add Customer</p>
+  <div class="card">
+    <label>Customer Name</label>
+    <input type="text" id="cust-name" placeholder="e.g. Mama Tunde" />
+    <label>Phone (optional)</label>
+    <input type="text" id="cust-phone" placeholder="e.g. 08012345678" />
+    <label>Amount Owed (₦)</label>
+    <input type="number" id="cust-debt" placeholder="e.g. 15000" />
+    <button class="btn" onclick="addCustomerAndDebt()">Save Customer</button>
+    <div id="customer-msg"></div>
+  </div>
+</div>
+
+<!-- DEBTS -->
+<div id="debts" class="page">
+  <p class="section-title">Debts</p>
+  <div class="card">
+    <label>Search by name</label>
+    <input type="text" id="search-name" placeholder="Customer name..." />
+    <button class="btn secondary" onclick="searchCustomer()">Search</button>
+    <div id="search-results"></div>
+  </div>
+  <div id="debts-list"></div>
+</div>
+
+<nav>
+  <button class="active" onclick="showPage('dashboard', this)">
+    <span class="icon">📊</span> Home
+  </button>
+  <button onclick="showPage('transaction', this)">
+    <span class="icon">➕</span> Record
+  </button>
+  <button onclick="showPage('customer', this)">
+    <span class="icon">👤</span> Customer
+  </button>
+  <button onclick="showPage('debts', this)">
+    <span class="icon">💳</span> Debts
+  </button>
+</nav>
+
+<script>
+  const BASE = "https://mum-ledger.onrender.com";
+
+  function showPage(id, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    if (id === 'dashboard') loadSummary();
+    if (id === 'debts') loadDebts();
+  }
+
+  function fmt(n) { return `₦${Number(n).toLocaleString()}`; }
+
+  async function loadSummary() {
+    try {
+      const res = await fetch(`${BASE}/transactions/summary`);
+      const data = await res.json();
+      document.getElementById('total-sales').textContent = fmt(data.total_sales);
+      document.getElementById('total-expenses').textContent = fmt(data.total_expenses);
+      document.getElementById('net-balance').textContent = fmt(data.net_balance);
+      document.getElementById('outstanding-debt').textContent = fmt(data.total_outstanding_debt);
+    } catch (e) {
+      document.getElementById('net-balance').textContent = 'Error';
+    }
+  }
+
+  async function recordTransaction() {
+    const amount = document.getElementById('amount').value;
+    const type = document.getElementById('type').value;
+    const description = document.getElementById('description').value;
+    const msg = document.getElementById('transaction-msg');
+    if (!amount) { showMsg(msg, 'Enter an amount.', 'error'); return; }
+    try {
+      const res = await fetch(`${BASE}/transactions/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: parseFloat(amount), type, description })
+      });
+      if (res.ok) {
+        showMsg(msg, '✅ Saved successfully!', 'success');
+        document.getElementById('amount').value = '';
+        document.getElementById('description').value = '';
+      } else {
+        showMsg(msg, 'Something went wrong.', 'error');
+      }
+    } catch (e) {
+      showMsg(msg, 'Could not connect to server.', 'error');
+    }
+  }
+
+  async function addCustomerAndDebt() {
+    const name = document.getElementById('cust-name').value;
+    const phone = document.getElementById('cust-phone').value;
+    const debt = document.getElementById('cust-debt').value;
+    const msg = document.getElementById('customer-msg');
+    if (!name || !debt) { showMsg(msg, 'Enter name and amount.', 'error'); return; }
+    try {
+      const custRes = await fetch(`${BASE}/credits/customers/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone })
+      });
+      const customer = await custRes.json();
+      await fetch(`${BASE}/credits/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customer_id: customer.id, amount_owed: parseFloat(debt) })
+      });
+      showMsg(msg, `✅ ${name} added with ${fmt(debt)} debt!`, 'success');
+      document.getElementById('cust-name').value = '';
+      document.getElementById('cust-phone').value = '';
+      document.getElementById('cust-debt').value = '';
+    } catch (e) {
+      showMsg(msg, 'Could not connect to server.', 'error');
+    }
+  }
+
+  async function loadDebts() {
+    const list = document.getElementById('debts-list');
+    list.innerHTML = '<div class="loading-text"><span class="spinner"></span> Loading debts...</div>';
+    try {
+      const res = await fetch(`${BASE}/credits/`);
+      const data = await res.json();
+      if (data.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="emoji">🎉</div><p>No outstanding debts!</p></div>`;
+        return;
+      }
+      list.innerHTML = data.map((d, i) => `
+        <div class="debt-item" style="animation-delay:${i * 0.07}s">
+          <h4>Credit #${d.id}</h4>
+          <div class="amount">${fmt(d.amount_owed)}</div>
+          <input type="number" placeholder="Enter payment amount" id="pay-${d.id}" />
+          <button class="btn" style="margin-top:10px;" onclick="makePayment(${d.id})">Record Payment</button>
+        </div>
+      `).join('');
+    } catch (e) {
+      list.innerHTML = '<p style="color:red;text-align:center;">Could not load debts.</p>';
+    }
+  }
+
+  async function makePayment(creditId) {
+    const amount = document.getElementById(`pay-${creditId}`).value;
+    if (!amount) return;
+    try {
+      const res = await fetch(`${BASE}/credits/${creditId}/pay`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount_paid: parseFloat(amount) })
+      });
+      const data = await res.json();
+      alert(`✅ Payment recorded!\nTotal paid: ${fmt(data.total_paid)}\nStatus: ${data.status}`);
+      loadDebts();
+    } catch (e) {
+      alert('Could not connect to server.');
+    }
+  }
+
+  async function searchCustomer() {
+    const name = document.getElementById('search-name').value;
+    const results = document.getElementById('search-results');
+    if (!name) return;
+    try {
+      const res = await fetch(`${BASE}/credits/customers/search?name=${encodeURIComponent(name)}`);
+      const data = await res.json();
+      results.innerHTML = data.map(c => `
+        <div class="search-result">
+          <strong>${c.name}</strong>
+          <span>${c.phone || 'No phone'} · ID: ${c.id}</span>
+        </div>
+      `).join('');
+    } catch (e) {
+      results.innerHTML = '<p style="color:red;margin-top:8px;">Customer not found.</p>';
+    }
+  }
+
+  function showMsg(el, text, type) {
+    el.className = `message ${type}`;
+    el.textContent = text;
+    setTimeout(() => { el.textContent = ''; el.className = ''; }, 4000);
+  }
+
+  loadSummary();
+</script>
+</body>
+</html>
