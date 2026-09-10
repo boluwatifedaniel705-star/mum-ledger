@@ -40,6 +40,7 @@ class CreditRecord(Base):
     created_at = Column(DateTime, default=nigeria_time)
     customer = relationship("Customer", back_populates="credits")
     payments = relationship("CreditPayment", back_populates="credit_record")
+    items = relationship("CreditItem", back_populates="credit_record")
 
 class CreditPayment(Base):
     __tablename__ = "credit_payments"
@@ -48,3 +49,14 @@ class CreditPayment(Base):
     amount_paid = Column(Float, nullable=False)
     date_paid = Column(DateTime, default=nigeria_time)
     credit_record = relationship("CreditRecord", back_populates="payments")
+
+class CreditItem(Base):
+    __tablename__ = "credit_items"
+    id = Column(Integer, primary_key=True, index=True)
+    credit_record_id = Column(Integer, ForeignKey("credit_records.id"))
+    item_name = Column(String, nullable=False)
+    quantity = Column(Float, nullable=False)
+    unit_price = Column(Float, nullable=False)
+    total = Column(Float, nullable=False)
+    date_added = Column(DateTime, default=nigeria_time)
+    credit_record = relationship("CreditRecord", back_populates="items")
