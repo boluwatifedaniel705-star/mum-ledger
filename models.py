@@ -55,7 +55,7 @@ class CreditItem(Base):
     id = Column(Integer, primary_key=True, index=True)
     credit_record_id = Column(Integer, ForeignKey("credit_records.id"))
     item_name = Column(String, nullable=False)
-    quantity = Column(Float, nullable=False)
+    quantity = Column(String, nullable=False)
     unit_price = Column(Float, nullable=False)
     total = Column(Float, nullable=False)
     date_added = Column(DateTime, default=nigeria_time)

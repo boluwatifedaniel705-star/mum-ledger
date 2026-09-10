@@ -72,7 +72,7 @@ def get_customer_credits(customer_id: int, db: Session = Depends(get_db)):
 
 class CreditItemCreate(BaseModel):
     item_name: str
-    quantity: float
+    quantity: str
     unit_price: float
 
 @router.post("/{credit_id}/items")
@@ -80,7 +80,7 @@ def add_credit_item(credit_id: int, item: CreditItemCreate, db: Session = Depend
     credit = db.query(models.CreditRecord).filter(models.CreditRecord.id == credit_id).first()
     if not credit:
         raise HTTPException(status_code=404, detail="Credit record not found")
-    total = item.quantity * item.unit_price
+    total = item.unit_price
     new_item = models.CreditItem(
         credit_record_id=credit_id,
         item_name=item.item_name,
