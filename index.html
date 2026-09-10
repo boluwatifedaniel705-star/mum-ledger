@@ -20,6 +20,8 @@
       --success-bg: #eaf2ff;
       --error-bg: #fff0f0;
       --error: #c0392b;
+      --green: #27ae60;
+      --red: #e74c3c;
     }
 
     body {
@@ -50,17 +52,8 @@
       border-radius: 50%;
     }
 
-    header h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 26px;
-      letter-spacing: 0.3px;
-    }
-
-    header p {
-      font-size: 13px;
-      opacity: 0.85;
-      margin-top: 2px;
-    }
+    header h1 { font-family: 'DM Serif Display', serif; font-size: 26px; }
+    header p { font-size: 13px; opacity: 0.85; margin-top: 2px; }
 
     nav {
       display: flex;
@@ -74,35 +67,17 @@
     }
 
     nav button {
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-size: 12px;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      padding: 6px 14px;
-      border-radius: 20px;
-      transition: all 0.25s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3px;
+      background: none; border: none; color: var(--muted);
+      font-size: 12px; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; padding: 6px 14px; border-radius: 20px;
+      transition: all 0.25s ease; display: flex;
+      flex-direction: column; align-items: center; gap: 3px;
     }
 
     nav button .icon { font-size: 20px; }
+    nav button.active { color: var(--blue); background: var(--blue-light); font-weight: 700; }
 
-    nav button.active {
-      color: var(--blue);
-      background: var(--blue-light);
-      font-weight: 700;
-    }
-
-    .page {
-      display: none;
-      padding: 32px 16px 16px;
-      animation: fadeSlideUp 0.3s ease;
-    }
-
+    .page { display: none; padding: 32px 16px 16px; animation: fadeSlideUp 0.3s ease; }
     .page.active { display: block; }
 
     @keyframes fadeSlideUp {
@@ -110,19 +85,11 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
 
     .stat-card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 16px 14px;
-      box-shadow: 0 2px 8px rgba(26,111,219,0.08);
-      animation: popIn 0.4s ease both;
+      background: var(--white); border-radius: 16px; padding: 16px 14px;
+      box-shadow: 0 2px 8px rgba(26,111,219,0.08); animation: popIn 0.4s ease both;
     }
 
     .stat-card:nth-child(1) { animation-delay: 0.05s; }
@@ -135,165 +102,136 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    .stat-card.wide {
-      grid-column: span 2;
-      background: var(--blue);
-      color: white;
-    }
-
-    .stat-card h3 {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
+    .stat-card.wide { grid-column: span 2; background: var(--blue); color: white; }
+    .stat-card h3 { font-size: 11px; font-weight: 500; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
     .stat-card.wide h3 { color: rgba(255,255,255,0.75); }
-
-    .stat-card p {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--blue);
-    }
-
+    .stat-card p { font-size: 22px; font-weight: 700; color: var(--blue); }
     .stat-card.wide p { color: white; font-size: 28px; }
 
-    .section-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 20px;
-      margin-bottom: 14px;
-      color: var(--text);
-    }
+    .section-title { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 14px; }
 
     .card {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 14px;
-      box-shadow: 0 2px 8px rgba(26,111,219,0.07);
+      background: var(--white); border-radius: 16px; padding: 20px;
+      margin-bottom: 14px; box-shadow: 0 2px 8px rgba(26,111,219,0.07);
     }
 
-    label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--muted);
-      display: block;
-      margin: 12px 0 4px;
-    }
+    label { font-size: 13px; font-weight: 500; color: var(--muted); display: block; margin: 12px 0 4px; }
 
     input, select {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 16px;
-      font-family: 'DM Sans', sans-serif;
-      background: #f5f8ff;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
+      width: 100%; padding: 12px 14px; border: 1.5px solid var(--border);
+      border-radius: 10px; font-size: 16px; font-family: 'DM Sans', sans-serif;
+      background: #f5f8ff; transition: border-color 0.2s, box-shadow 0.2s; outline: none;
     }
 
-    input:focus, select:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px var(--blue-glow);
-    }
+    input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-glow); }
 
     button.btn {
-      width: 100%;
-      padding: 14px;
-      background: var(--blue);
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 700;
-      font-family: 'DM Sans', sans-serif;
-      cursor: pointer;
-      margin-top: 16px;
+      width: 100%; padding: 14px; background: var(--blue); color: white;
+      border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; margin-top: 10px;
       transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
       box-shadow: 0 4px 14px rgba(26,111,219,0.3);
     }
 
     button.btn:hover { background: var(--blue-dark); }
     button.btn:active { transform: scale(0.97); box-shadow: none; }
-
-    button.btn.secondary {
-      background: var(--blue-light);
-      color: var(--blue);
-      box-shadow: none;
-    }
+    button.btn.secondary { background: var(--blue-light); color: var(--blue); box-shadow: none; }
+    button.btn.danger { background: var(--red); box-shadow: 0 4px 14px rgba(231,76,60,0.3); }
+    button.btn.success { background: var(--green); box-shadow: 0 4px 14px rgba(39,174,96,0.3); }
+    button.btn.small { padding: 10px; font-size: 14px; }
 
     .message {
-      padding: 12px 14px;
-      border-radius: 10px;
-      margin-top: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      text-align: center;
+      padding: 12px 14px; border-radius: 10px; margin-top: 12px;
+      font-size: 14px; font-weight: 500; text-align: center; animation: fadeSlideUp 0.25s ease;
+    }
+
+    .success-msg { background: var(--success-bg); color: var(--blue-dark); }
+    .error-msg { background: var(--error-bg); color: var(--error); }
+
+    .search-result {
+      margin-top: 10px; padding: 14px; background: var(--blue-light);
+      border-radius: 12px; cursor: pointer; transition: background 0.2s, transform 0.15s;
       animation: fadeSlideUp 0.25s ease;
     }
 
-    .success { background: var(--success-bg); color: var(--blue-dark); }
-    .error { background: var(--error-bg); color: var(--error); }
+    .search-result:hover { background: #d0e8ff; transform: scale(1.01); }
+    .search-result strong { font-size: 16px; }
+    .search-result span { font-size: 13px; color: var(--muted); display: block; margin-top: 2px; }
+    .search-result .tap-hint { font-size: 11px; color: var(--blue); margin-top: 4px; }
 
-    .debt-item {
-      background: var(--white);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(26,111,219,0.07);
+    /* CUSTOMER PROFILE */
+    .profile-header {
+      background: var(--blue); color: white; border-radius: 16px;
+      padding: 20px; margin-bottom: 14px; position: relative;
+    }
+
+    .profile-header h2 { font-family: 'DM Serif Display', serif; font-size: 22px; }
+    .profile-header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+
+    .back-btn {
+      background: none; border: none; color: var(--blue); font-size: 14px;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; padding: 0;
+      margin-bottom: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px;
+    }
+
+    .credit-record {
+      background: var(--white); border-radius: 16px; padding: 16px;
+      margin-bottom: 14px; box-shadow: 0 2px 8px rgba(26,111,219,0.07);
       animation: fadeSlideUp 0.3s ease both;
     }
 
-    .debt-item h4 {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
+    .credit-record .record-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .credit-record .record-header h4 { font-size: 15px; font-weight: 700; }
+    .status-badge {
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 20px; text-transform: uppercase;
     }
 
-    .debt-item .amount {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--blue);
-      margin-bottom: 10px;
+    .status-badge.pending { background: #fff3cd; color: #856404; }
+    .status-badge.settled { background: #d1e7dd; color: #0a3622; }
+
+    .amount-big { font-size: 24px; font-weight: 700; color: var(--blue); margin-bottom: 12px; }
+
+    .items-list { margin-bottom: 12px; }
+    .item-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px;
     }
 
-    .search-result {
-      margin-top: 10px;
-      padding: 14px;
-      background: var(--blue-light);
-      border-radius: 12px;
-      animation: fadeSlideUp 0.25s ease;
+    .item-row:last-child { border-bottom: none; }
+    .item-row .item-name { font-weight: 500; }
+    .item-row .item-detail { color: var(--muted); font-size: 12px; }
+    .item-row .item-total { font-weight: 700; color: var(--blue); }
+
+    .payments-list { margin-bottom: 12px; }
+    .payment-row {
+      display: flex; justify-content: space-between; padding: 6px 0;
+      border-bottom: 1px solid #f0f0f0; font-size: 13px; color: var(--green);
     }
 
-    .search-result strong { font-size: 16px; }
-    .search-result span { font-size: 13px; color: var(--muted); display: block; margin-top: 2px; }
+    .payment-row:last-child { border-bottom: none; }
 
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--muted);
-    }
+    .section-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; margin-top: 12px; }
 
+    .add-item-form { background: #f5f8ff; border-radius: 12px; padding: 14px; margin-top: 10px; }
+    .add-item-form input { margin: 4px 0; }
+
+    .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
     .empty-state .emoji { font-size: 40px; margin-bottom: 10px; }
-    .empty-state p { font-size: 15px; }
 
     .spinner {
-      display: inline-block;
-      width: 18px; height: 18px;
-      border: 2px solid rgba(26,111,219,0.2);
-      border-top-color: var(--blue);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      vertical-align: middle;
-      margin-right: 6px;
+      display: inline-block; width: 18px; height: 18px;
+      border: 2px solid rgba(26,111,219,0.2); border-top-color: var(--blue);
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      vertical-align: middle; margin-right: 6px;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .loading-text { color: var(--muted); font-size: 14px; display: flex; align-items: center; }
+
+    .divider { height: 1px; background: #e8f0fe; margin: 14px 0; }
   </style>
 </head>
 <body>
@@ -343,7 +281,7 @@
   </div>
 </div>
 
-<!-- CUSTOMER -->
+<!-- CUSTOMER (Add New) -->
 <div id="customer" class="page">
   <p class="section-title">Add Customer</p>
   <div class="card">
@@ -358,16 +296,25 @@
   </div>
 </div>
 
-<!-- DEBTS -->
+<!-- DEBTS / SEARCH -->
 <div id="debts" class="page">
-  <p class="section-title">Debts</p>
-  <div class="card">
-    <label>Search by name</label>
-    <input type="text" id="search-name" placeholder="Customer name..." />
-    <button class="btn secondary" onclick="searchCustomer()">Search</button>
-    <div id="search-results"></div>
+  <!-- Search view -->
+  <div id="search-view">
+    <p class="section-title">Debts</p>
+    <div class="card">
+      <label>Search customer by name</label>
+      <input type="text" id="search-name" placeholder="Customer name..." />
+      <button class="btn secondary" onclick="searchCustomer()">Search</button>
+      <div id="search-results"></div>
+    </div>
+    <div id="debts-list"></div>
   </div>
-  <div id="debts-list"></div>
+
+  <!-- Customer profile view -->
+  <div id="profile-view" style="display:none;">
+    <button class="back-btn" onclick="showSearchView()">← Back to Search</button>
+    <div id="profile-content"></div>
+  </div>
 </div>
 
 <nav>
@@ -399,6 +346,10 @@
 
   function fmt(n) { return `₦${Number(n).toLocaleString()}`; }
 
+  function fmtDate(d) {
+    return new Date(d).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
   async function loadSummary() {
     try {
       const res = await fetch(`${BASE}/transactions/summary`);
@@ -417,23 +368,18 @@
     const type = document.getElementById('type').value;
     const description = document.getElementById('description').value;
     const msg = document.getElementById('transaction-msg');
-    if (!amount) { showMsg(msg, 'Enter an amount.', 'error'); return; }
+    if (!amount) { showMsg(msg, 'Enter an amount.', 'error-msg'); return; }
     try {
       const res = await fetch(`${BASE}/transactions/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: parseFloat(amount), type, description })
       });
       if (res.ok) {
-        showMsg(msg, '✅ Saved successfully!', 'success');
+        showMsg(msg, '✅ Saved successfully!', 'success-msg');
         document.getElementById('amount').value = '';
         document.getElementById('description').value = '';
-      } else {
-        showMsg(msg, 'Something went wrong.', 'error');
-      }
-    } catch (e) {
-      showMsg(msg, 'Could not connect to server.', 'error');
-    }
+      } else { showMsg(msg, 'Something went wrong.', 'error-msg'); }
+    } catch (e) { showMsg(msg, 'Could not connect to server.', 'error-msg'); }
   }
 
   async function addCustomerAndDebt() {
@@ -441,31 +387,27 @@
     const phone = document.getElementById('cust-phone').value;
     const debt = document.getElementById('cust-debt').value;
     const msg = document.getElementById('customer-msg');
-    if (!name || !debt) { showMsg(msg, 'Enter name and amount.', 'error'); return; }
+    if (!name || !debt) { showMsg(msg, 'Enter name and amount.', 'error-msg'); return; }
     try {
       const custRes = await fetch(`${BASE}/credits/customers/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, phone })
       });
       const customer = await custRes.json();
       await fetch(`${BASE}/credits/`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ customer_id: customer.id, amount_owed: parseFloat(debt) })
       });
-      showMsg(msg, `✅ ${name} added with ${fmt(debt)} debt!`, 'success');
+      showMsg(msg, `✅ ${name} added with ${fmt(debt)} debt!`, 'success-msg');
       document.getElementById('cust-name').value = '';
       document.getElementById('cust-phone').value = '';
       document.getElementById('cust-debt').value = '';
-    } catch (e) {
-      showMsg(msg, 'Could not connect to server.', 'error');
-    }
+    } catch (e) { showMsg(msg, 'Could not connect to server.', 'error-msg'); }
   }
 
   async function loadDebts() {
     const list = document.getElementById('debts-list');
-    list.innerHTML = '<div class="loading-text"><span class="spinner"></span> Loading debts...</div>';
+    list.innerHTML = '<div class="loading-text"><span class="spinner"></span> Loading...</div>';
     try {
       const res = await fetch(`${BASE}/credits/`);
       const data = await res.json();
@@ -473,52 +415,178 @@
         list.innerHTML = `<div class="empty-state"><div class="emoji">🎉</div><p>No outstanding debts!</p></div>`;
         return;
       }
-      list.innerHTML = data.map((d, i) => `
-        <div class="debt-item" style="animation-delay:${i * 0.07}s">
-          <h4>Credit #${d.id}</h4>
-          <div class="amount">${fmt(d.amount_owed)}</div>
-          <input type="number" placeholder="Enter payment amount" id="pay-${d.id}" />
-          <button class="btn" style="margin-top:10px;" onclick="makePayment(${d.id})">Record Payment</button>
-        </div>
-      `).join('');
-    } catch (e) {
-      list.innerHTML = '<p style="color:red;text-align:center;">Could not load debts.</p>';
-    }
-  }
-
-  async function makePayment(creditId) {
-    const amount = document.getElementById(`pay-${creditId}`).value;
-    if (!amount) return;
-    try {
-      const res = await fetch(`${BASE}/credits/${creditId}/pay`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount_paid: parseFloat(amount) })
-      });
-      const data = await res.json();
-      alert(`✅ Payment recorded!\nTotal paid: ${fmt(data.total_paid)}\nStatus: ${data.status}`);
-      loadDebts();
-    } catch (e) {
-      alert('Could not connect to server.');
-    }
+      list.innerHTML = `<p style="font-size:13px;color:var(--muted);margin-bottom:8px;">${data.length} outstanding debt(s) — search a customer to manage</p>`;
+    } catch (e) { list.innerHTML = ''; }
   }
 
   async function searchCustomer() {
     const name = document.getElementById('search-name').value;
     const results = document.getElementById('search-results');
     if (!name) return;
+    results.innerHTML = '<div class="loading-text" style="margin-top:10px;"><span class="spinner"></span> Searching...</div>';
     try {
       const res = await fetch(`${BASE}/credits/customers/search?name=${encodeURIComponent(name)}`);
       const data = await res.json();
       results.innerHTML = data.map(c => `
-        <div class="search-result">
+        <div class="search-result" onclick="openCustomerProfile(${c.id})">
           <strong>${c.name}</strong>
-          <span>${c.phone || 'No phone'} · ID: ${c.id}</span>
+          <span>${c.phone || 'No phone'}</span>
+          <span class="tap-hint">Tap to view profile →</span>
         </div>
       `).join('');
     } catch (e) {
       results.innerHTML = '<p style="color:red;margin-top:8px;">Customer not found.</p>';
     }
+  }
+
+  async function openCustomerProfile(customerId) {
+    document.getElementById('search-view').style.display = 'none';
+    document.getElementById('profile-view').style.display = 'block';
+    const content = document.getElementById('profile-content');
+    content.innerHTML = '<div class="loading-text"><span class="spinner"></span> Loading profile...</div>';
+
+    try {
+      const res = await fetch(`${BASE}/credits/customers/${customerId}/full`);
+      const data = await res.json();
+      renderProfile(data);
+    } catch (e) {
+      content.innerHTML = '<p style="color:red;">Could not load profile.</p>';
+    }
+  }
+
+  function renderProfile(data) {
+    const { customer, credits } = data;
+    const content = document.getElementById('profile-content');
+
+    const totalOwed = credits.filter(c => c.status === 'pending').reduce((sum, c) => sum + c.amount_owed, 0);
+
+    content.innerHTML = `
+      <div class="profile-header">
+        <h2>${customer.name}</h2>
+        <p>${customer.phone || 'No phone'}</p>
+        ${totalOwed > 0 ? `<p style="margin-top:8px;font-size:18px;font-weight:700;">Owes: ${fmt(totalOwed)}</p>` : '<p style="margin-top:8px;color:#a8f0c6;">✅ No outstanding debt</p>'}
+      </div>
+
+      <div class="card">
+        <p class="section-label">Add New Debt Record</p>
+        <input type="number" id="new-debt-amount" placeholder="Amount (₦)" />
+        <button class="btn small" onclick="addNewDebt(${customer.id})">+ Add Debt Record</button>
+      </div>
+
+      ${credits.length === 0 ? '<div class="empty-state"><div class="emoji">📭</div><p>No credit records yet.</p></div>' :
+        credits.map((credit, i) => `
+          <div class="credit-record" style="animation-delay:${i * 0.07}s">
+            <div class="record-header">
+              <h4>Record #${credit.id}</h4>
+              <span class="status-badge ${credit.status}">${credit.status}</span>
+            </div>
+            <div class="amount-big">${fmt(credit.amount_owed)}</div>
+            <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Created: ${fmtDate(credit.created_at)}</p>
+
+            ${credit.items.length > 0 ? `
+              <p class="section-label">Items</p>
+              <div class="items-list">
+                ${credit.items.map(item => `
+                  <div class="item-row">
+                    <div>
+                      <div class="item-name">${item.item_name}</div>
+                      <div class="item-detail">${item.quantity} × ${fmt(item.unit_price)}</div>
+                    </div>
+                    <div class="item-total">${fmt(item.total)}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+
+            ${credit.payments.length > 0 ? `
+              <p class="section-label">Payments</p>
+              <div class="payments-list">
+                ${credit.payments.map(p => `
+                  <div class="payment-row">
+                    <span>✅ ${fmtDate(p.date_paid)}</span>
+                    <span>${fmt(p.amount_paid)}</span>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+
+            ${credit.status === 'pending' ? `
+              <div class="divider"></div>
+              <p class="section-label">Add Item to this Record</p>
+              <div class="add-item-form">
+                <input type="text" id="item-name-${credit.id}" placeholder="Item name (e.g. Rice)" />
+                <input type="number" id="item-qty-${credit.id}" placeholder="Quantity" />
+                <input type="number" id="item-price-${credit.id}" placeholder="Unit price (₦)" />
+                <button class="btn small secondary" onclick="addItem(${credit.id}, ${customer.id})">+ Add Item</button>
+              </div>
+
+              <div class="divider"></div>
+              <p class="section-label">Record Payment</p>
+              <input type="number" id="pay-${credit.id}" placeholder="Payment amount (₦)" />
+              <div class="action-buttons">
+                <button class="btn small success" onclick="makePayment(${credit.id}, ${customer.id})">Pay Partial</button>
+                <button class="btn small danger" onclick="clearDebt(${credit.id}, ${customer.id})">Clear Debt</button>
+              </div>
+            ` : ''}
+          </div>
+        `).join('')
+      }
+    `;
+  }
+
+  async function addNewDebt(customerId) {
+    const amount = document.getElementById('new-debt-amount').value;
+    if (!amount) return;
+    try {
+      await fetch(`${BASE}/credits/`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ customer_id: customerId, amount_owed: parseFloat(amount) })
+      });
+      document.getElementById('new-debt-amount').value = '';
+      openCustomerProfile(customerId);
+    } catch (e) { alert('Could not connect to server.'); }
+  }
+
+  async function addItem(creditId, customerId) {
+    const name = document.getElementById(`item-name-${creditId}`).value;
+    const qty = document.getElementById(`item-qty-${creditId}`).value;
+    const price = document.getElementById(`item-price-${creditId}`).value;
+    if (!name || !qty || !price) { alert('Fill in all item fields.'); return; }
+    try {
+      await fetch(`${BASE}/credits/${creditId}/items`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ item_name: name, quantity: parseFloat(qty), unit_price: parseFloat(price) })
+      });
+      openCustomerProfile(customerId);
+    } catch (e) { alert('Could not connect to server.'); }
+  }
+
+  async function makePayment(creditId, customerId) {
+    const amount = document.getElementById(`pay-${creditId}`).value;
+    if (!amount) return;
+    try {
+      const res = await fetch(`${BASE}/credits/${creditId}/pay`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount_paid: parseFloat(amount) })
+      });
+      const data = await res.json();
+      alert(`✅ Payment recorded!\nTotal paid: ${fmt(data.total_paid)}\nStatus: ${data.status}`);
+      openCustomerProfile(customerId);
+    } catch (e) { alert('Could not connect to server.'); }
+  }
+
+  async function clearDebt(creditId, customerId) {
+    if (!confirm('Clear this entire debt?')) return;
+    try {
+      await fetch(`${BASE}/credits/${creditId}/clear`, { method: 'POST' });
+      alert('✅ Debt cleared!');
+      openCustomerProfile(customerId);
+    } catch (e) { alert('Could not connect to server.'); }
+  }
+
+  function showSearchView() {
+    document.getElementById('search-view').style.display = 'block';
+    document.getElementById('profile-view').style.display = 'none';
   }
 
   function showMsg(el, text, type) {
