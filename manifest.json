@@ -1,0 +1,22 @@
+{
+  "name": "Ledger/Records",
+  "short_name": "Ledger",
+  "description": "Provisions and wholesale business ledger",
+  "start_url": "/mum-ledger/",
+  "display": "standalone",
+  "background_color": "#f0f5ff",
+  "theme_color": "#1a6fdb",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/1a6fdb/ffffff?text=ML",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/1a6fdb/ffffff?text=ML",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

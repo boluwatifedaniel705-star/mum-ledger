@@ -247,6 +247,8 @@
 
     .new-customer-items { background: #f5f8ff; border-radius: 12px; padding: 14px; margin-top: 10px; }
   </style>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a6fdb">
 </head>
 <body>
 
@@ -729,6 +731,13 @@
   }
 
   loadSummary();
+  if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/mum-ledger/service-worker.js')
+      .then(reg => console.log('SW registered'))
+      .catch(err => console.log('SW error', err));
+  });
+}
 </script>
 </body>
 </html>
