@@ -159,10 +159,9 @@
     .search-result span { font-size: 13px; color: var(--muted); display: block; margin-top: 2px; }
     .search-result .tap-hint { font-size: 11px; color: var(--blue); margin-top: 4px; }
 
-    /* CUSTOMER PROFILE */
     .profile-header {
       background: var(--blue); color: white; border-radius: 16px;
-      padding: 20px; margin-bottom: 14px; position: relative;
+      padding: 20px; margin-bottom: 14px;
     }
 
     .profile-header h2 { font-family: 'DM Serif Display', serif; font-size: 22px; }
@@ -182,6 +181,7 @@
 
     .credit-record .record-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .credit-record .record-header h4 { font-size: 15px; font-weight: 700; }
+
     .status-badge {
       font-size: 11px; font-weight: 700; padding: 3px 10px;
       border-radius: 20px; text-transform: uppercase;
@@ -214,7 +214,6 @@
     .section-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; margin-top: 12px; }
 
     .add-item-form { background: #f5f8ff; border-radius: 12px; padding: 14px; margin-top: 10px; }
-    .add-item-form input { margin: 4px 0; }
 
     .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 
@@ -232,6 +231,21 @@
     .loading-text { color: var(--muted); font-size: 14px; display: flex; align-items: center; }
 
     .divider { height: 1px; background: #e8f0fe; margin: 14px 0; }
+
+    .item-input-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .item-input-row input {
+      margin: 0;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .new-customer-items { background: #f5f8ff; border-radius: 12px; padding: 14px; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -289,16 +303,24 @@
     <input type="text" id="cust-name" placeholder="e.g. Mama Tunde" />
     <label>Phone (optional)</label>
     <input type="text" id="cust-phone" placeholder="e.g. 08012345678" />
-    <label>Amount Owed (₦)</label>
-    <input type="number" id="cust-debt" placeholder="e.g. 15000" />
-    <button class="btn" onclick="addCustomerAndDebt()">Save Customer</button>
+    <div class="divider"></div>
+    <p class="section-label">Items Bought</p>
+    <div class="new-customer-items">
+      <div id="new-cust-item-rows">
+        <div class="item-input-row">
+          <input type="text" placeholder="Item name" class="item-name-input" />
+          <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
+          <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onNewCustItemInput(this)" />
+        </div>
+      </div>
+    </div>
+    <button class="btn" onclick="addCustomerWithItems()">Save Customer</button>
     <div id="customer-msg"></div>
   </div>
 </div>
 
 <!-- DEBTS / SEARCH -->
 <div id="debts" class="page">
-  <!-- Search view -->
   <div id="search-view">
     <p class="section-title">Debts</p>
     <div class="card">
@@ -310,7 +332,6 @@
     <div id="debts-list"></div>
   </div>
 
-  <!-- Customer profile view -->
   <div id="profile-view" style="display:none;">
     <button class="back-btn" onclick="showSearchView()">← Back to Search</button>
     <div id="profile-content"></div>
@@ -382,26 +403,73 @@
     } catch (e) { showMsg(msg, 'Could not connect to server.', 'error-msg'); }
   }
 
-  async function addCustomerAndDebt() {
+  // New customer item row logic
+  function onNewCustItemInput(input) {
+    const rows = document.getElementById('new-cust-item-rows');
+    const allRows = rows.querySelectorAll('.item-input-row');
+    const currentRow = input.closest('.item-input-row');
+    const lastRow = allRows[allRows.length - 1];
+    if (currentRow === lastRow && input.value) {
+      const newRow = document.createElement('div');
+      newRow.className = 'item-input-row';
+      newRow.innerHTML = `
+        <input type="text" placeholder="Item name" class="item-name-input" />
+        <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
+        <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onNewCustItemInput(this)" />
+      `;
+      rows.appendChild(newRow);
+    }
+  }
+
+  async function addCustomerWithItems() {
     const name = document.getElementById('cust-name').value;
     const phone = document.getElementById('cust-phone').value;
-    const debt = document.getElementById('cust-debt').value;
     const msg = document.getElementById('customer-msg');
-    if (!name || !debt) { showMsg(msg, 'Enter name and amount.', 'error-msg'); return; }
+    if (!name) { showMsg(msg, 'Enter customer name.', 'error-msg'); return; }
+
+    const rows = document.getElementById('new-cust-item-rows').querySelectorAll('.item-input-row');
+    const items = [];
+    rows.forEach(row => {
+      const n = row.querySelector('.item-name-input').value;
+      const q = row.querySelector('.item-qty-input').value;
+      const p = row.querySelector('.item-price-input').value;
+      if (n && p) items.push({ item_name: n, quantity: q || '1', unit_price: parseFloat(p) });
+    });
+
+    if (items.length === 0) { showMsg(msg, 'Add at least one item.', 'error-msg'); return; }
+
+    const total = items.reduce((sum, i) => sum + i.unit_price, 0);
+
     try {
       const custRes = await fetch(`${BASE}/credits/customers/`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, phone })
       });
       const customer = await custRes.json();
-      await fetch(`${BASE}/credits/`, {
+
+      const creditRes = await fetch(`${BASE}/credits/`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customer_id: customer.id, amount_owed: parseFloat(debt) })
+        body: JSON.stringify({ customer_id: customer.id, amount_owed: total })
       });
-      showMsg(msg, `✅ ${name} added with ${fmt(debt)} debt!`, 'success-msg');
+      const credit = await creditRes.json();
+
+      for (const item of items) {
+        await fetch(`${BASE}/credits/${credit.id}/items`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item)
+        });
+      }
+
+      showMsg(msg, `✅ ${name} added with ${fmt(total)} debt!`, 'success-msg');
       document.getElementById('cust-name').value = '';
       document.getElementById('cust-phone').value = '';
-      document.getElementById('cust-debt').value = '';
+      document.getElementById('new-cust-item-rows').innerHTML = `
+        <div class="item-input-row">
+          <input type="text" placeholder="Item name" class="item-name-input" />
+          <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
+          <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onNewCustItemInput(this)" />
+        </div>
+      `;
     } catch (e) { showMsg(msg, 'Could not connect to server.', 'error-msg'); }
   }
 
@@ -444,7 +512,6 @@
     document.getElementById('profile-view').style.display = 'block';
     const content = document.getElementById('profile-content');
     content.innerHTML = '<div class="loading-text"><span class="spinner"></span> Loading profile...</div>';
-
     try {
       const res = await fetch(`${BASE}/credits/customers/${customerId}/full`);
       const data = await res.json();
@@ -457,7 +524,6 @@
   function renderProfile(data) {
     const { customer, credits } = data;
     const content = document.getElementById('profile-content');
-
     const totalOwed = credits.filter(c => c.status === 'pending').reduce((sum, c) => sum + c.amount_owed, 0);
 
     content.innerHTML = `
@@ -469,8 +535,16 @@
 
       <div class="card">
         <p class="section-label">Add New Debt Record</p>
-        <input type="number" id="new-debt-amount" placeholder="Amount (₦)" />
-        <button class="btn small" onclick="addNewDebt(${customer.id})">+ Add Debt Record</button>
+        <div class="new-customer-items">
+          <div id="new-debt-item-rows-${customer.id}">
+            <div class="item-input-row">
+              <input type="text" placeholder="Item name" class="item-name-input" />
+              <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
+              <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onNewDebtItemInput(${customer.id}, this)" />
+            </div>
+          </div>
+        </div>
+        <button class="btn small" onclick="saveNewDebtWithItems(${customer.id})">💾 Save New Debt</button>
       </div>
 
       ${credits.length === 0 ? '<div class="empty-state"><div class="emoji">📭</div><p>No credit records yet.</p></div>' :
@@ -512,12 +586,16 @@
 
             ${credit.status === 'pending' ? `
               <div class="divider"></div>
-              <p class="section-label">Add Item to this Record</p>
+              <p class="section-label">Add More Items</p>
               <div class="add-item-form">
-                <input type="text" id="item-name-${credit.id}" placeholder="Item name (e.g. Rice)" />
-                <input type="text" id="item-qty-${credit.id}" placeholder="Quantity (e.g. 2 bags, 1 cup)" />
-                <input type="number" id="item-price-${credit.id}" placeholder="Unit price (₦)" />
-                <button class="btn small secondary" onclick="addItem(${credit.id}, ${customer.id})">+ Add Item</button>
+                <div id="item-rows-${credit.id}">
+                  <div class="item-input-row">
+                    <input type="text" placeholder="Item name" class="item-name-input" />
+                    <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
+                    <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onItemInput(${credit.id}, this)" />
+                  </div>
+                </div>
+                <button class="btn small secondary" onclick="saveAllItems(${credit.id}, ${customer.id})">💾 Save Items</button>
               </div>
 
               <div class="divider"></div>
@@ -534,29 +612,84 @@
     `;
   }
 
-  async function addNewDebt(customerId) {
-    const amount = document.getElementById('new-debt-amount').value;
-    if (!amount) return;
+  function onNewDebtItemInput(customerId, input) {
+    const rows = document.getElementById(`new-debt-item-rows-${customerId}`);
+    const allRows = rows.querySelectorAll('.item-input-row');
+    const currentRow = input.closest('.item-input-row');
+    const lastRow = allRows[allRows.length - 1];
+    if (currentRow === lastRow && input.value) {
+      const newRow = document.createElement('div');
+      newRow.className = 'item-input-row';
+      newRow.innerHTML = `
+        <input type="text" placeholder="Item name" class="item-name-input" />
+        <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
+        <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onNewDebtItemInput(${customerId}, this)" />
+      `;
+      rows.appendChild(newRow);
+    }
+  }
+
+  async function saveNewDebtWithItems(customerId) {
+    const rows = document.getElementById(`new-debt-item-rows-${customerId}`).querySelectorAll('.item-input-row');
+    const items = [];
+    rows.forEach(row => {
+      const n = row.querySelector('.item-name-input').value;
+      const q = row.querySelector('.item-qty-input').value;
+      const p = row.querySelector('.item-price-input').value;
+      if (n && p) items.push({ item_name: n, quantity: q || '1', unit_price: parseFloat(p) });
+    });
+    if (items.length === 0) { alert('Add at least one item.'); return; }
+    const total = items.reduce((sum, i) => sum + i.unit_price, 0);
     try {
-      await fetch(`${BASE}/credits/`, {
+      const creditRes = await fetch(`${BASE}/credits/`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customer_id: customerId, amount_owed: parseFloat(amount) })
+        body: JSON.stringify({ customer_id: customerId, amount_owed: total })
       });
-      document.getElementById('new-debt-amount').value = '';
+      const credit = await creditRes.json();
+      for (const item of items) {
+        await fetch(`${BASE}/credits/${credit.id}/items`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item)
+        });
+      }
       openCustomerProfile(customerId);
     } catch (e) { alert('Could not connect to server.'); }
   }
 
-  async function addItem(creditId, customerId) {
-    const name = document.getElementById(`item-name-${creditId}`).value;
-    const qty = document.getElementById(`item-qty-${creditId}`).value;
-    const price = document.getElementById(`item-price-${creditId}`).value;
-    if (!name || !qty || !price) { alert('Fill in all item fields.'); return; }
+  function onItemInput(creditId, input) {
+    const rows = document.getElementById(`item-rows-${creditId}`);
+    const allRows = rows.querySelectorAll('.item-input-row');
+    const currentRow = input.closest('.item-input-row');
+    const lastRow = allRows[allRows.length - 1];
+    if (currentRow === lastRow && input.value) {
+      const newRow = document.createElement('div');
+      newRow.className = 'item-input-row';
+      newRow.innerHTML = `
+        <input type="text" placeholder="Item name" class="item-name-input" />
+        <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
+        <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onItemInput(${creditId}, this)" />
+      `;
+      rows.appendChild(newRow);
+    }
+  }
+
+  async function saveAllItems(creditId, customerId) {
+    const rows = document.getElementById(`item-rows-${creditId}`).querySelectorAll('.item-input-row');
+    const items = [];
+    rows.forEach(row => {
+      const n = row.querySelector('.item-name-input').value;
+      const q = row.querySelector('.item-qty-input').value;
+      const p = row.querySelector('.item-price-input').value;
+      if (n && p) items.push({ item_name: n, quantity: q || '1', unit_price: parseFloat(p) });
+    });
+    if (items.length === 0) { alert('Add at least one item.'); return; }
     try {
-      await fetch(`${BASE}/credits/${creditId}/items`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ item_name: name, quantity: parseFloat(qty), unit_price: parseFloat(price) })
-      });
+      for (const item of items) {
+        await fetch(`${BASE}/credits/${creditId}/items`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(item)
+        });
+      }
       openCustomerProfile(customerId);
     } catch (e) { alert('Could not connect to server.'); }
   }
