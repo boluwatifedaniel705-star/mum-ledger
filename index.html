@@ -1,4 +1,4 @@
-<!-- v1.1 -->
+<!-- v1.3 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +32,6 @@
       min-height: 100vh;
       padding-bottom: 80px;
     }
-    
 
     header {
       background: var(--blue);
@@ -241,167 +240,293 @@
       margin-bottom: 8px;
     }
 
-    .item-input-row input {
-      margin: 0;
-      padding: 10px;
-      font-size: 14px;
-    }
+    .item-input-row input { margin: 0; padding: 10px; font-size: 14px; }
 
     .new-customer-items { background: #f5f8ff; border-radius: 12px; padding: 14px; margin-top: 10px; }
+
+    /* AUTH */
+    .auth-screen {
+      min-height: 100vh; background: #f0f5ff; display: flex;
+      flex-direction: column; align-items: center; justify-content: center; padding: 24px;
+    }
+
+    .auth-box { width: 100%; max-width: 400px; }
+
+    .auth-logo { text-align: center; margin-bottom: 32px; }
+    .auth-logo h1 { font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--blue); }
+    .auth-logo p { color: var(--muted); margin-top: 6px; }
+
+    .auth-card {
+      background: white; border-radius: 20px; padding: 24px;
+      box-shadow: 0 4px 20px rgba(26,111,219,0.1);
+    }
+
+    .auth-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+    .auth-card label { margin: 0 0 4px; }
+    .auth-card input { margin: 4px 0 14px; background: #f5f8ff; }
+
+    .auth-switch { text-align: center; margin-top: 16px; font-size: 14px; color: var(--muted); }
+    .auth-switch span { color: var(--blue); font-weight: 700; cursor: pointer; }
+
+    .logout-btn {
+      background: none; border: none; color: rgba(255,255,255,0.8);
+      font-size: 12px; font-family: 'DM Sans', sans-serif;
+      cursor: pointer; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+    }
   </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1a6fdb">
 </head>
 <body>
-<!-- AUTH SCREENS -->
+
+<!-- AUTH SCREEN -->
 <div id="auth-screen" style="display:none;">
-  <div style="min-height:100vh;background:#f0f5ff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;">
-    
+  <div class="auth-screen">
+
     <!-- LOGIN -->
-    <div id="login-form" style="width:100%;max-width:400px;">
-      <div style="text-align:center;margin-bottom:32px;">
-        <h1 style="font-family:'DM Serif Display',serif;font-size:32px;color:#1a6fdb;">Mum's Ledger</h1>
-        <p style="color:#888;margin-top:6px;">Provisions & Wholesale</p>
+    <div id="login-form" class="auth-box">
+      <div class="auth-logo">
+        <h1>Mum's Ledger</h1>
+        <p>Provisions & Wholesale</p>
       </div>
-      <div style="background:white;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(26,111,219,0.1);">
-        <h2 style="font-size:20px;font-weight:700;margin-bottom:20px;">Welcome back</h2>
-        <label style="font-size:13px;color:#888;font-weight:500;">Phone Number</label>
-        <input type="tel" id="login-phone" placeholder="e.g. 08012345678" style="margin:6px 0 14px;" />
-        <label style="font-size:13px;color:#888;font-weight:500;">Password</label>
-        <input type="password" id="login-password" placeholder="Enter your password" style="margin:6px 0 14px;" />
+      <div class="auth-card">
+        <h2>Welcome back 👋</h2>
+        <label>Phone Number</label>
+        <input type="tel" id="login-phone" placeholder="e.g. 08012345678" />
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Enter your password" />
         <button class="btn" onclick="handleLogin()">Login</button>
         <div id="login-msg"></div>
-        <p style="text-align:center;margin-top:16px;font-size:14px;color:#888;">Don't have an account? <span style="color:#1a6fdb;font-weight:700;cursor:pointer;" onclick="showSignup()">Sign up</span></p>
+        <div class="auth-switch">Don't have an account? <span onclick="showSignup()">Sign up</span></div>
       </div>
     </div>
 
     <!-- SIGNUP -->
-    <div id="signup-form" style="width:100%;max-width:400px;display:none;">
-      <div style="text-align:center;margin-bottom:32px;">
-        <h1 style="font-family:'DM Serif Display',serif;font-size:32px;color:#1a6fdb;">Mum's Ledger</h1>
-        <p style="color:#888;margin-top:6px;">Create your account</p>
+    <div id="signup-form" class="auth-box" style="display:none;">
+      <div class="auth-logo">
+        <h1>Mum's Ledger</h1>
+        <p>Create your account</p>
       </div>
-      <div style="background:white;border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(26,111,219,0.1);">
-        <h2 style="font-size:20px;font-weight:700;margin-bottom:20px;">Create Account</h2>
-        <label style="font-size:13px;color:#888;font-weight:500;">Phone Number</label>
-        <input type="tel" id="signup-phone" placeholder="e.g. 08012345678" style="margin:6px 0 14px;" />
-        <label style="font-size:13px;color:#888;font-weight:500;">Password</label>
-        <input type="password" id="signup-password" placeholder="Create a password" style="margin:6px 0 14px;" />
-        <label style="font-size:13px;color:#888;font-weight:500;">Confirm Password</label>
-        <input type="password" id="signup-confirm" placeholder="Repeat your password" style="margin:6px 0 14px;" />
+      <div class="auth-card">
+        <h2>Create Account</h2>
+        <label>Phone Number</label>
+        <input type="tel" id="signup-phone" placeholder="e.g. 08012345678" />
+        <label>Password</label>
+        <input type="password" id="signup-password" placeholder="Create a password" />
+        <label>Confirm Password</label>
+        <input type="password" id="signup-confirm" placeholder="Repeat your password" />
         <button class="btn" onclick="handleSignup()">Create Account</button>
         <div id="signup-msg"></div>
-        <p style="text-align:center;margin-top:16px;font-size:14px;color:#888;">Already have an account? <span style="color:#1a6fdb;font-weight:700;cursor:pointer;" onclick="showLogin()">Login</span></p>
+        <div class="auth-switch">Already have an account? <span onclick="showLogin()">Login</span></div>
       </div>
     </div>
 
   </div>
 </div>
-<header>
-  <h1>Mum's Ledger</h1>
-  <p>Provisions & Wholesale</p>
-</header>
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="page active">
-  <div class="summary-grid">
-    <div class="stat-card wide">
-      <h3>Net Balance</h3>
-      <p id="net-balance"><span class="spinner"></span></p>
-    </div>
-    <div class="stat-card">
-      <h3>Sales</h3>
-      <p id="total-sales">—</p>
-    </div>
-    <div class="stat-card">
-      <h3>Expenses</h3>
-      <p id="total-expenses">—</p>
-    </div>
-    <div class="stat-card wide">
-      <h3>Outstanding Debt</h3>
-      <p id="outstanding-debt">—</p>
+<!-- MAIN APP -->
+<div id="main-app" style="display:none;">
+
+  <header style="position:relative;">
+    <h1>Mum's Ledger</h1>
+    <p>Provisions & Wholesale</p>
+    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+  </header>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="page active">
+    <div class="summary-grid">
+      <div class="stat-card wide">
+        <h3>Net Balance</h3>
+        <p id="net-balance"><span class="spinner"></span></p>
+      </div>
+      <div class="stat-card">
+        <h3>Sales</h3>
+        <p id="total-sales">—</p>
+      </div>
+      <div class="stat-card">
+        <h3>Expenses</h3>
+        <p id="total-expenses">—</p>
+      </div>
+      <div class="stat-card wide">
+        <h3>Outstanding Debt</h3>
+        <p id="outstanding-debt">—</p>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- RECORD TRANSACTION -->
-<div id="transaction" class="page">
-  <p class="section-title">Record</p>
-  <div class="card">
-    <label>Type</label>
-    <select id="type">
-      <option value="sale">💰 Sale</option>
-      <option value="expense">🧾 Expense</option>
-    </select>
-    <label>Amount (₦)</label>
-    <input type="number" id="amount" placeholder="e.g. 5000" />
-    <label>Description (optional)</label>
-    <input type="text" id="description" placeholder="e.g. sold rice and beans" />
-    <button class="btn" onclick="recordTransaction()">Save Record</button>
-    <div id="transaction-msg"></div>
+  <!-- RECORD TRANSACTION -->
+  <div id="transaction" class="page">
+    <p class="section-title">Record</p>
+    <div class="card">
+      <label>Type</label>
+      <select id="type">
+        <option value="sale">💰 Sale</option>
+        <option value="expense">🧾 Expense</option>
+      </select>
+      <label>Amount (₦)</label>
+      <input type="number" id="amount" placeholder="e.g. 5000" />
+      <label>Description (optional)</label>
+      <input type="text" id="description" placeholder="e.g. sold rice and beans" />
+      <button class="btn" onclick="recordTransaction()">Save Record</button>
+      <div id="transaction-msg"></div>
+    </div>
   </div>
-</div>
 
-<!-- CUSTOMER (Add New) -->
-<div id="customer" class="page">
-  <p class="section-title">Add Customer</p>
-  <div class="card">
-    <label>Customer Name</label>
-    <input type="text" id="cust-name" placeholder="e.g. Mama Tunde" />
-    <label>Phone (optional)</label>
-    <input type="text" id="cust-phone" placeholder="e.g. 08012345678" />
-    <div class="divider"></div>
-    <p class="section-label">Items Bought</p>
-    <div class="new-customer-items">
-      <div id="new-cust-item-rows">
-        <div class="item-input-row">
-          <input type="text" placeholder="Item name" class="item-name-input" />
-          <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
-          <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onNewCustItemInput(this)" />
+  <!-- CUSTOMER -->
+  <div id="customer" class="page">
+    <p class="section-title">Add Customer</p>
+    <div class="card">
+      <label>Customer Name</label>
+      <input type="text" id="cust-name" placeholder="e.g. Mama Tunde" />
+      <label>Phone (optional)</label>
+      <input type="text" id="cust-phone" placeholder="e.g. 08012345678" />
+      <div class="divider"></div>
+      <p class="section-label">Items Bought</p>
+      <div class="new-customer-items">
+        <div id="new-cust-item-rows">
+          <div class="item-input-row">
+            <input type="text" placeholder="Item name" class="item-name-input" />
+            <input type="text" placeholder="Qty (e.g. 2 bags)" class="item-qty-input" />
+            <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onNewCustItemInput(this)" />
+          </div>
         </div>
       </div>
+      <button class="btn" onclick="addCustomerWithItems()">Save Customer</button>
+      <div id="customer-msg"></div>
     </div>
-    <button class="btn" onclick="addCustomerWithItems()">Save Customer</button>
-    <div id="customer-msg"></div>
   </div>
-</div>
 
-<!-- DEBTS / SEARCH -->
-<div id="debts" class="page">
-  <div id="search-view">
-    <p class="section-title">Debts</p>
-    <div class="card">
-      <label>Search customer by name</label>
-      <input type="text" id="search-name" placeholder="Customer name..." />
-      <button class="btn secondary" onclick="searchCustomer()">Search</button>
-      <div id="search-results"></div>
+  <!-- DEBTS -->
+  <div id="debts" class="page">
+    <div id="search-view">
+      <p class="section-title">Debts</p>
+      <div class="card">
+        <label>Search customer by name</label>
+        <input type="text" id="search-name" placeholder="Customer name..." />
+        <button class="btn secondary" onclick="searchCustomer()">Search</button>
+        <div id="search-results"></div>
+      </div>
+      <div id="debts-list"></div>
     </div>
-    <div id="debts-list"></div>
+    <div id="profile-view" style="display:none;">
+      <button class="back-btn" onclick="showSearchView()">← Back to Search</button>
+      <div id="profile-content"></div>
+    </div>
   </div>
 
-  <div id="profile-view" style="display:none;">
-    <button class="back-btn" onclick="showSearchView()">← Back to Search</button>
-    <div id="profile-content"></div>
-  </div>
+  <nav>
+    <button class="active" onclick="showPage('dashboard', this)">
+      <span class="icon">📊</span> Home
+    </button>
+    <button onclick="showPage('transaction', this)">
+      <span class="icon">➕</span> Record
+    </button>
+    <button onclick="showPage('customer', this)">
+      <span class="icon">👤</span> Customer
+    </button>
+    <button onclick="showPage('debts', this)">
+      <span class="icon">💳</span> Debts
+    </button>
+  </nav>
+
 </div>
-
-<nav>
-  <button class="active" onclick="showPage('dashboard', this)">
-    <span class="icon">📊</span> Home
-  </button>
-  <button onclick="showPage('transaction', this)">
-    <span class="icon">➕</span> Record
-  </button>
-  <button onclick="showPage('customer', this)">
-    <span class="icon">👤</span> Customer
-  </button>
-  <button onclick="showPage('debts', this)">
-    <span class="icon">💳</span> Debts
-  </button>
-</nav>
 
 <script>
   const BASE = "https://mum-ledger.onrender.com";
+
+  function checkAuth() {
+    const token = localStorage.getItem('ledger_token');
+    if (token) {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+      loadSummary();
+    } else {
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('main-app').style.display = 'none';
+    }
+  }
+
+  function showSignup() {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('signup-form').style.display = 'block';
+  }
+
+  function showLogin() {
+    document.getElementById('signup-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+  }
+
+  async function handleSignup() {
+    const phone = document.getElementById('signup-phone').value.trim();
+    const password = document.getElementById('signup-password').value;
+    const confirm = document.getElementById('signup-confirm').value;
+    const msg = document.getElementById('signup-msg');
+    const btn = document.querySelector('#signup-form .btn');
+
+    if (!phone || !password) { showMsg(msg, 'Fill in all fields.', 'error-msg'); return; }
+    if (password !== confirm) { showMsg(msg, 'Passwords do not match.', 'error-msg'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:white;"></span> Creating...';
+
+    try {
+      const res = await fetch(`${BASE}/auth/signup`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        showMsg(msg, '✅ Account created! Please login.', 'success-msg');
+        setTimeout(() => showLogin(), 1500);
+      } else {
+        showMsg(msg, data.detail || 'Something went wrong.', 'error-msg');
+      }
+    } catch (e) {
+      showMsg(msg, 'Could not connect to server.', 'error-msg');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Create Account';
+    }
+  }
+
+  async function handleLogin() {
+    const phone = document.getElementById('login-phone').value.trim();
+    const password = document.getElementById('login-password').value;
+    const msg = document.getElementById('login-msg');
+    const btn = document.querySelector('#login-form .btn');
+
+    if (!phone || !password) { showMsg(msg, 'Fill in all fields.', 'error-msg'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:white;"></span> Logging in...';
+
+    try {
+      const res = await fetch(`${BASE}/auth/login`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('ledger_token', data.access_token);
+        checkAuth();
+      } else {
+        showMsg(msg, data.detail || 'Invalid credentials.', 'error-msg');
+      }
+    } catch (e) {
+      showMsg(msg, 'Could not connect to server.', 'error-msg');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Login';
+    }
+  }
+
+  function handleLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+      localStorage.removeItem('ledger_token');
+      checkAuth();
+    }
+  }
 
   function showPage(id, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -450,7 +575,6 @@
     } catch (e) { showMsg(msg, 'Could not connect to server.', 'error-msg'); }
   }
 
-  // New customer item row logic
   function onNewCustItemInput(input) {
     const rows = document.getElementById('new-cust-item-rows');
     const allRows = rows.querySelectorAll('.item-input-row');
@@ -468,7 +592,7 @@
     }
   }
 
-async function addCustomerWithItems() {
+  async function addCustomerWithItems() {
     const name = document.getElementById('cust-name').value.trim();
     const phone = document.getElementById('cust-phone').value.trim();
     const msg = document.getElementById('customer-msg');
@@ -487,7 +611,6 @@ async function addCustomerWithItems() {
 
     if (items.length === 0) { showMsg(msg, 'Add at least one item.', 'error-msg'); return; }
 
-    // Check for duplicate name
     try {
       const checkRes = await fetch(`${BASE}/credits/customers/search?name=${encodeURIComponent(name)}`);
       const existing = await checkRes.json();
@@ -498,11 +621,8 @@ async function addCustomerWithItems() {
       }
     } catch (e) {}
 
-    // Disable button and show spinner
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:white;"></span> Saving...';
-
-    const total = items.reduce((sum, i) => sum + i.unit_price, 0);
 
     try {
       const custRes = await fetch(`${BASE}/credits/customers/`, {
@@ -524,7 +644,7 @@ async function addCustomerWithItems() {
         });
       }
 
-      showMsg(msg, `✅ ${name} added with ${fmt(total)} debt!`, 'success-msg');
+      showMsg(msg, `✅ ${name} added successfully!`, 'success-msg');
       document.getElementById('cust-name').value = '';
       document.getElementById('cust-phone').value = '';
       document.getElementById('new-cust-item-rows').innerHTML = `
@@ -708,11 +828,10 @@ async function addCustomerWithItems() {
       if (n && p) items.push({ item_name: n, quantity: q || '1', unit_price: parseFloat(p) });
     });
     if (items.length === 0) { alert('Add at least one item.'); return; }
-    const total = items.reduce((sum, i) => sum + i.unit_price, 0);
     try {
       const creditRes = await fetch(`${BASE}/credits/`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-       body: JSON.stringify({ customer_id: customerId, amount_owed: 0 })
+        body: JSON.stringify({ customer_id: customerId, amount_owed: 0 })
       });
       const credit = await creditRes.json();
       for (const item of items) {
@@ -797,18 +916,15 @@ async function addCustomerWithItems() {
     setTimeout(() => { el.textContent = ''; el.className = ''; }, 4000);
   }
 
-function checkAuth() {
-    const token = localStorage.getItem('ledger_token');
-    if (token) {
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('main-app').style.display = 'block';
-      loadSummary();
-    } else {
-      document.getElementById('auth-screen').style.display = 'flex';
-      document.getElementById('main-app').style.display = 'none';
-    }
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/mum-ledger/service-worker.js')
+        .then(reg => console.log('SW registered'))
+        .catch(err => console.log('SW error', err));
+    });
   }
 
+  checkAuth();
 </script>
 </body>
 </html>
