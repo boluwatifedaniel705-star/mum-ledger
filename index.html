@@ -423,10 +423,12 @@
     }
   }
 
-  async function addCustomerWithItems() {
-    const name = document.getElementById('cust-name').value;
-    const phone = document.getElementById('cust-phone').value;
+async function addCustomerWithItems() {
+    const name = document.getElementById('cust-name').value.trim();
+    const phone = document.getElementById('cust-phone').value.trim();
     const msg = document.getElementById('customer-msg');
+    const btn = document.querySelector('#customer .btn');
+
     if (!name) { showMsg(msg, 'Enter customer name.', 'error-msg'); return; }
 
     const rows = document.getElementById('new-cust-item-rows').querySelectorAll('.item-input-row');
@@ -439,6 +441,21 @@
     });
 
     if (items.length === 0) { showMsg(msg, 'Add at least one item.', 'error-msg'); return; }
+
+    // Check for duplicate name
+    try {
+      const checkRes = await fetch(`${BASE}/credits/customers/search?name=${encodeURIComponent(name)}`);
+      const existing = await checkRes.json();
+      const exactMatch = existing.find(c => c.name.toLowerCase() === name.toLowerCase());
+      if (exactMatch) {
+        showMsg(msg, `❌ "${name}" already exists. Search for them in Debts tab.`, 'error-msg');
+        return;
+      }
+    } catch (e) {}
+
+    // Disable button and show spinner
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner" style="border-color:rgba(255,255,255,0.3);border-top-color:white;"></span> Saving...';
 
     const total = items.reduce((sum, i) => sum + i.unit_price, 0);
 
@@ -472,7 +489,12 @@
           <input type="number" placeholder="Price (₦)" class="item-price-input" oninput="onNewCustItemInput(this)" />
         </div>
       `;
-    } catch (e) { showMsg(msg, 'Could not connect to server.', 'error-msg'); }
+    } catch (e) {
+      showMsg(msg, 'Could not connect to server.', 'error-msg');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Save Customer';
+    }
   }
 
   async function loadDebts() {
