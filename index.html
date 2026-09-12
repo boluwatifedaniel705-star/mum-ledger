@@ -797,14 +797,18 @@ async function addCustomerWithItems() {
     setTimeout(() => { el.textContent = ''; el.className = ''; }, 4000);
   }
 
-  checkAuth();
-  if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/mum-ledger/service-worker.js')
-      .then(reg => console.log('SW registered'))
-      .catch(err => console.log('SW error', err));
-  });
-}
+function checkAuth() {
+    const token = localStorage.getItem('ledger_token');
+    if (token) {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('main-app').style.display = 'block';
+      loadSummary();
+    } else {
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('main-app').style.display = 'none';
+    }
+  }
+
 </script>
 </body>
 </html>
