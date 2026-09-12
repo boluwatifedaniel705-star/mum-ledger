@@ -4,6 +4,13 @@ from database import Base
 from datetime import datetime, timezone, timedelta
 import enum
 
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    phone = Column(String, unique=True, nullable=False)
+    password = Column(String, nullable=False)
+    created_at = Column(DateTime, default=nigeria_time)
+    
 def nigeria_time():
     return datetime.now(timezone(timedelta(hours=1)))
 
