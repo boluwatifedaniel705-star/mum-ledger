@@ -468,7 +468,7 @@ async function addCustomerWithItems() {
 
       const creditRes = await fetch(`${BASE}/credits/`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customer_id: customer.id, amount_owed: total })
+        body: JSON.stringify({ customer_id: customer.id, amount_owed: 0 })
       });
       const credit = await creditRes.json();
 
@@ -667,7 +667,7 @@ async function addCustomerWithItems() {
     try {
       const creditRes = await fetch(`${BASE}/credits/`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ customer_id: customerId, amount_owed: total })
+       body: JSON.stringify({ customer_id: customerId, amount_owed: 0 })
       });
       const credit = await creditRes.json();
       for (const item of items) {
