@@ -797,7 +797,7 @@ async function addCustomerWithItems() {
     setTimeout(() => { el.textContent = ''; el.className = ''; }, 4000);
   }
 
-  loadSummary();
+  checkAuth();
   if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/mum-ledger/service-worker.js')
